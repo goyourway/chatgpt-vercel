@@ -62,7 +62,27 @@ export const post: APIRoute = async context => {
       password?: string
     }
 
-    if (pwd && pwd !== password) {
+    const isPassword = await fetchWithTimeout(
+      `https://api.jiing.cn/orm/checkPassword`,
+      {
+        timeout: 2000,
+        method: "GET",
+        body: JSON.stringify({
+          passwordKey: password
+        })
+      }
+    ).catch(err => {
+      return new Response(
+        JSON.stringify({
+          error: {
+            message: err.message
+          }
+        }),
+        { status: 500 }
+      )
+    })
+
+    if (!isPassword.ok) {
       throw new Error("密码错误，请联系网站管理员。")
     }
 
