@@ -81,12 +81,12 @@ export const post: APIRoute = async context => {
     })
 
     if (!res.ok) {
-      throw new Error("请求错误")
+      throw new Error("请求网络错误")
     } else {
       const resJson = await res.json()
       if (resJson.expired) throw new Error("密码已经过期")
-      else if (resJson.active) throw new Error("密码正确")
-      else {
+      else if (resJson.active) {
+      } else {
         throw new Error("密码错误")
       }
     }
