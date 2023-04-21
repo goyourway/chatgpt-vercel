@@ -24,8 +24,8 @@ export default (props: Props) => {
   useCopyCode()
   const roleClass = {
     system: "bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300",
-    user: "bg-gradient-to-r from-red-300 to-blue-700 ",
-    assistant: "bg-gradient-to-r from-yellow-300 to-red-700 "
+    user: "../user.png ",
+    assistant: "../ai.png "
   }
 
   const md = MarkdownIt({
@@ -79,7 +79,9 @@ export default (props: Props) => {
         class={`shrink-0 w-7 h-7 mt-4 rounded-full op-80 ${
           roleClass[props.role]
         }`}
-      ></div>
+      >
+        <img src={`${roleClass[props.role]}`}></img>
+      </div>
       <div
         class="message prose prose-slate dark:prose-invert dark:text-slate break-words overflow-hidden"
         innerHTML={md.render(props.message)}

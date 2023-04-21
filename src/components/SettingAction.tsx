@@ -18,7 +18,7 @@ export default function SettingAction(props: {
   return (
     <div class="text-sm text-slate-7 dark:text-slate mb-2">
       <Show when={shown()}>
-        <SettingItem icon="i-ri:lock-password-line" label="网站密码">
+        <SettingItem icon="i-ri:lock-password-line" label="使用密码">
           <input
             type="password"
             value={props.setting().password}
@@ -27,32 +27,6 @@ export default function SettingAction(props: {
               props.setSetting({
                 ...props.setting(),
                 password: (e.target as HTMLInputElement).value
-              })
-            }}
-          />
-        </SettingItem>
-        <SettingItem icon="i-carbon:api" label="OpenAI API Key">
-          <input
-            type="password"
-            value={props.setting().openaiAPIKey}
-            class="max-w-150px ml-1em px-1 text-slate-7 dark:text-slate rounded-sm bg-slate bg-op-15 focus:bg-op-20 focus:ring-0 focus:outline-none"
-            onInput={e => {
-              props.setSetting({
-                ...props.setting(),
-                openaiAPIKey: (e.target as HTMLInputElement).value
-              })
-            }}
-          />
-        </SettingItem>
-        <SettingItem icon="i-carbon:user-online" label="系统角色指令">
-          <input
-            type="text"
-            value={props.setting().systemRule}
-            class="text-ellipsis max-w-150px ml-1em px-1 text-slate-7 dark:text-slate rounded-sm bg-slate bg-op-15 focus:bg-op-20 focus:ring-0 focus:outline-none"
-            onInput={e => {
-              props.setSetting({
-                ...props.setting(),
-                systemRule: (e.target as HTMLInputElement).value
               })
             }}
           />
@@ -74,10 +48,7 @@ export default function SettingAction(props: {
             }}
           />
         </SettingItem>
-        <SettingItem
-          icon="i-carbon:save-image"
-          label="记录对话内容，刷新不会消失"
-        >
+        <SettingItem icon="i-carbon:save-image" label="记录当前对话">
           <label class="relative inline-flex items-center cursor-pointer ml-1">
             <input
               type="checkbox"
@@ -93,25 +64,7 @@ export default function SettingAction(props: {
             <div class="w-9 h-5 bg-slate bg-op-15 peer-focus:outline-none peer-focus:ring-0  rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-slate"></div>
           </label>
         </SettingItem>
-        <SettingItem
-          icon="i-carbon:3d-curve-auto-colon"
-          label="开启连续对话，将加倍消耗 Token"
-        >
-          <label class="relative inline-flex items-center cursor-pointer ml-1">
-            <input
-              type="checkbox"
-              checked={props.setting().continuousDialogue}
-              class="sr-only peer"
-              onChange={e => {
-                props.setSetting({
-                  ...props.setting(),
-                  continuousDialogue: (e.target as HTMLInputElement).checked
-                })
-              }}
-            />
-            <div class="w-9 h-5 bg-slate bg-op-15 peer-focus:outline-none peer-focus:ring-0  rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-slate"></div>
-          </label>
-        </SettingItem>
+
         <hr class="mt-2 bg-slate-5 bg-op-15 border-none h-1px"></hr>
       </Show>
       <div class="mt-2 flex items-center justify-between">
@@ -130,20 +83,7 @@ export default function SettingAction(props: {
               setTimeout(() => setIMGCopied(false), 1000)
             }}
             icon="i-carbon:image"
-            label="导出图片"
-          />
-          <ActionItem
-            label="导出 Markdown"
-            onClick={async () => {
-              await exportMD(props.messaages)
-              setCopied(true)
-              setTimeout(() => setCopied(false), 1000)
-            }}
-            icon={
-              copied()
-                ? "i-ri:check-fill dark:text-yellow text-yellow-6"
-                : "i-ri:markdown-line"
-            }
+            label="复制图片到粘贴板"
           />
           <ActionItem
             onClick={props.reAnswer}

@@ -43,6 +43,8 @@ export const baseURL = import.meta.env.NOGFW
       ""
     )
 
+export const serverURL = "api.jiing.cn/orm"
+
 const maxTokens = Number(import.meta.env.MAX_INPUT_TOKENS)
 
 const pwd = import.meta.env.PASSWORD
@@ -62,14 +64,10 @@ export const post: APIRoute = async context => {
       password?: string
     }
 
-    const isPassword = await fetchWithTimeout(
-      `https://api.jiing.cn/orm/checkPassword`,
+    const res = await fetch(
+      `https://${serverURL}/checkPassword?passwordKey=${password}`,
       {
-        timeout: 2000,
-        method: "GET",
-        body: JSON.stringify({
-          passwordKey: password
-        })
+        method: "GET"
       }
     ).catch(err => {
       return new Response(
@@ -82,8 +80,15 @@ export const post: APIRoute = async context => {
       )
     })
 
-    if (!isPassword.ok) {
-      throw new Error("密码错误，请联系网站管理员。")
+    if (!res.ok) {
+      throw new Error("请求错误")
+    } else {
+      const resJson = await res.json()
+      if (resJson.expired) throw new Error("密码已经过期")
+      else if (resJson.active) throw new Error("密码正确")
+      else {
+        throw new Error("密码错误")
+      }
     }
 
     if (!messages?.length) {
